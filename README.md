@@ -1,5 +1,7 @@
 # run-camunda
 
+[![Build Status](https://travis-ci.org/nikku/run-camunda.svg?branch=master)](https://travis-ci.org/nikku/run-camunda)
+
 Download, spin up and shutdown [Camunda](https://camunda.org/) painlessly from Node.
 
 
