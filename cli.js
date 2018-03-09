@@ -17,11 +17,15 @@ if (mode !== 'start' && mode !== 'stop') {
 if (mode === 'start') {
   return startCamunda().catch(function(err) {
     console.error('Failed to start', err);
+
+    process.exit(1);
   });
 }
 
 if (mode === 'stop') {
   stopCamunda().catch(function(err) {
     console.error('Failed to stop', err);
+
+    process.exit(1);
   });
 }
