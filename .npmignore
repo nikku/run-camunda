@@ -1,4 +1,5 @@
-.eslint
+tmp
+.eslintrc
 .eslintignore
 .travis.yml
 CHANGELOG.md
