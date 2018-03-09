@@ -1,0 +1,5 @@
+.eslint
+.eslintignore
+.travis.yml
+CHANGELOG.md
+test.js
