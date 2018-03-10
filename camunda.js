@@ -2,6 +2,8 @@ const path = require('path');
 const fs = require('fs');
 const execa = require('execa');
 
+const isReachable = require('is-reachable');
+
 const download = require('download');
 
 const mkdirp = require('mkdirp');
@@ -15,13 +17,19 @@ const TMP_DIR = path.join(__dirname + '/tmp');
 const CAMUNDA_DIST = path.join(TMP_DIR + '/dist');
 const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
 
+const REST_API_URL = 'http://localhost:8080/engine-rest';
+const DOWNLOAD_BASE = 'https://camunda.org/release/camunda-bpm';
+
+function isUp() {
+  return isReachable(`${REST_API_URL}/deployment`);
+}
 
 function existsDir(dir) {
   return fs.existsSync(dir);
 }
 
 function downloadCamunda(camundaDir) {
-  const downloadUrl = `https://camunda.org/release/camunda-bpm/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
+  const downloadUrl = `${DOWNLOAD_BASE}/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
 
   return download(downloadUrl, camundaDir, { extract: true });
 }
@@ -35,6 +43,44 @@ async function runCamunda(camundaDir, workDir, script) {
   });
 }
 
+
+function waitUntil(fn, msg, maxWait) {
+
+  if (typeof msg === 'number') {
+    maxWait = msg;
+    msg = null;
+  }
+
+  var start = Date.now();
+  var timeout = 1000;
+
+  return new Promise(function(resolve, reject) {
+
+    function check() {
+
+      (async function() {
+        var ok = await fn();
+
+        if (ok) {
+          resolve();
+        } else {
+          if (msg) {
+            console.log(msg);
+          }
+
+          if (typeof maxWait === 'number') {
+            if ((Date.now() - start) > maxWait) {
+              return reject(new Error('maxWait exceeded'));
+            }
+          }
+          setTimeout(check, timeout);
+        }
+      })().catch(reject);
+    }
+
+    check();
+  });
+}
 
 function wait(s) {
   return new Promise(function(resolve) {
@@ -71,7 +117,7 @@ async function startCamunda() {
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'startup');
 
-  await wait(3);
+  await waitUntil(isUp, 'Waiting for Camunda to be up...', 30000);
 
   console.log('Camunda started.');
 }
