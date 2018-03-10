@@ -30,7 +30,7 @@ Camunda stopped.
 
 ## Test Life-Cycle Integration
 
-Use `pretest` and `posttest` hooks in your project's `package.json` to interate `run-camunda` into the test life-cycle:
+Use `pretest` and `posttest` hooks in your project's `package.json` to integrate `run-camunda` into the test life-cycle:
 
 ```json
 {
