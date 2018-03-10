@@ -70,7 +70,7 @@ function waitUntil(fn, msg, maxWait) {
 
           if (typeof maxWait === 'number') {
             if ((Date.now() - start) > maxWait) {
-              return reject(new Error('maxWait exceeded'));
+              return reject(new Error('Max wait time exceeded'));
             }
           }
           setTimeout(check, timeout);
@@ -117,7 +117,7 @@ async function startCamunda() {
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'startup');
 
-  await waitUntil(isUp, 'Waiting for Camunda to be up...', 30000);
+  await waitUntil(isUp, 'Waiting for Camunda to be up...', 60000);
 
   console.log('Camunda started.');
 }
