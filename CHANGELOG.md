@@ -6,6 +6,10 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 1.0.2
+
+* `DOCS`: documentation improvements
+
 ## 1.0.1
 
 * `CHORE`: initial release
