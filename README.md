@@ -28,6 +28,21 @@ Camunda stopped.
 ```
 
 
+## Test Life-Cycle Integration
+
+Use `pretest` and `posttest` hooks in your project's `package.json` to interate `run-camunda` into the test life-cycle:
+
+```json
+{
+  "scripts": {
+    "pretest": "camunda start",
+    "test": "echo 'running test'",
+    "posttest": "camunda stop"
+  }
+}
+```
+
+
 ## License
 
 MIT
