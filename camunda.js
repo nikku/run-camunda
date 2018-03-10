@@ -36,9 +36,9 @@ async function runCamunda(camundaDir, workDir, script) {
 }
 
 
-function wait(ms) {
+function wait(s) {
   return new Promise(function(resolve) {
-    setTimeout(resolve, ms);
+    setTimeout(resolve, s * 1000);
   });
 }
 
