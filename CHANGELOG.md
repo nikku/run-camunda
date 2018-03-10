@@ -6,6 +6,10 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 1.1.0
+
+* `FEAT`: wait until Camunda REST api is up
+
 ## 1.0.3
 
 * `FIX`: wait actual _seconds_ before reporting Camunda to be up
