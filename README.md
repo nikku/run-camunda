@@ -66,6 +66,19 @@ Use `pretest` and `posttest` hooks in your project's `package.json` to integrate
 ```
 
 
+## Related
+
+
+### Resources
+
+* [Camunda documentation](https://docs.camunda.org/manual/latest/) / [external tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/)
+
+### Projects
+
+* [camunda-worker-node](https://github.com/nikku/camunda-worker-node)
+* [camunda-external-task-client-js](https://github.com/camunda/camunda-external-task-client-js)
+
+
 ## License
 
 MIT
