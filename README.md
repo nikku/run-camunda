@@ -27,24 +27,26 @@ Cleaning up ...
 Camunda stopped.
 ```
 
-Camunda is up and running on `localhost:8080` once `camunda start` completes. 
 
+## Access Camunda
 
-### Camunda REST API
+Camunda is up and running on `localhost:8080` once `camunda start` completes.
 
-Access the Camunda instance via the [Camunda REST API](https://docs.camunda.org/manual/latest/reference/rest/overview/distro-use/), available at `http://localhost:8080/engine-rest`. 
+### REST API
+
+Access the Camunda instance via the [Camunda REST API](https://docs.camunda.org/manual/latest/reference/rest/overview/distro-use/), available at `http://localhost:8080/engine-rest`.
 
 Refer to the [Camunda documentation](https://docs.camunda.org/manual/latest/reference/rest/) to learn how to deploy and run your processes. Checkout [camunda-worker-node](https://github.com/nikku/camunda-worker-node) for a simple way to contribute work via [external tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/).
 
 
-### Camunda Apps
+### Webapps
 
 The running Camunda instance includes all stock apps:
 
 | App | Purpose |
 | :--- | :--- |
 | [Admin](http://localhost:8080/camunda/app/admin/) | administrate engines, users and rights |
-| [Cockpit](http://localhost:8080/camunda/app/cockpit/) | introspect the engine | 
+| [Cockpit](http://localhost:8080/camunda/app/cockpit/) | introspect the engine |
 | [Tasklist](http://localhost:8080/camunda/app/tasklist/) | list and execute tasks |
 | [Welcome](http://localhost:8080/camunda/app/welcome/) | check your user profile |
 
