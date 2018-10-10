@@ -6,12 +6,21 @@
   "bin": {
     "camunda": "./cli.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikku/run-camunda.git"
+  },
   "scripts": {
     "all": "run-s lint test",
     "lint": "eslint .",
     "test": "node test.js"
   },
-  "keywords": [],
+  "keywords": [
+    "camunda",
+    "camunda bpm",
+    "cli",
+    "run"
+  ],
   "author": {
     "name": "Nico Rehwaldt",
     "url": "https://github.com/nikku"
