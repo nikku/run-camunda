@@ -40,7 +40,7 @@ async function runCamunda(camundaDir, workDir, script) {
 
   if (process.platform === 'win32') {
     let env = Object.create(process.env);
-    let cwd = path.join(camundaDir.replace(/\\/g, '/'), `server/${tomcatFolder}/bin`);
+    let cwd = path.join(camundaDir, `server/${tomcatFolder}/bin`);
 
     spawn(`${cwd}/${script}.bat`,
       [],
