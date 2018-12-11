@@ -3,14 +3,10 @@
 const {
   startCamunda,
   stopCamunda
-} = require('./camunda').init(os, version);
+} = require('./camunda');
 
 var argv = process.argv;
 var mode = argv[2];
-var os   = argv[3] || 'linux';
-var version = argv[4] || '7.8';
-
-var mode = argv[argv.length - 1];
 
 if (mode !== 'start' && mode !== 'stop') {
   console.error('Usage: camunda [start|stop]');
