@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const execa = require('execa');
+const { spawn } = require('child_process');
 
 const isReachable = require('is-reachable');
 
@@ -10,7 +11,7 @@ const mkdirp = require('mkdirp');
 
 const del = require('del');
 
-const CAMUNDA_VERSION = '7.8';
+let _os, CAMUNDA_VERSION = '7.8';
 
 const TMP_DIR = path.join(__dirname + '/tmp');
 
@@ -35,14 +36,28 @@ function downloadCamunda(camundaDir) {
 }
 
 async function runCamunda(camundaDir, workDir, script) {
+    let tomcatFolder = fs.readdirSync(camundaDir + '/server')[0]; //find tomcat server folder - changes with every camunda version
 
-  var executable = path.join(camundaDir, `server/apache-tomcat-8.0.47/bin/${script}.sh`);
+    if(_os === 'windows'){
+        let env = Object.create(process.env);
+        let cwd = path.join(camundaDir.replace(/\\/g, '/'), `server/${tomcatFolder}/bin`);
 
-  await execa(executable, {
-    cwd: workDir
-  });
+        spawn(`${cwd}/${script}.bat`,
+            [],
+            {
+                env,
+                cwd,
+                shell: true
+            }
+        );
+    }
+    else{
+        let executable = path.join(camundaDir, `server/${tomcatFolder}/bin/${script}.sh`);
+        await execa(executable, {
+            cwd: workDir
+        });
+    }
 }
-
 
 function waitUntil(fn, msg, maxWait) {
 
@@ -147,3 +162,13 @@ async function stopCamunda() {
 }
 
 module.exports.stopCamunda = stopCamunda;
+
+function init(os, version){
+    _os = os || 'linux';
+    CAMUNDA_VERSION = version || '7.8';
+    return {
+        startCamunda, stopCamunda
+    };
+}
+
+module.exports.init = init;

@@ -3,10 +3,12 @@
 const {
   startCamunda,
   stopCamunda
-} = require('./camunda');
-
+} = require('./camunda').init(os, version);
 
 var argv = process.argv;
+var mode = argv[2];
+var os   = argv[3] || 'linux';
+var version = argv[4] || '7.8';
 
 var mode = argv[argv.length - 1];
 
