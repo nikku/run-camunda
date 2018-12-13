@@ -10,7 +10,7 @@ const mkdirp = require('mkdirp');
 
 const del = require('del');
 
-const CAMUNDA_VERSION = '7.8';
+const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.8';
 
 const TMP_DIR = path.join(__dirname + '/tmp');
 
@@ -20,11 +20,11 @@ const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
 const REST_API_URL = 'http://localhost:8080/engine-rest';
 const DOWNLOAD_BASE = 'https://camunda.org/release/camunda-bpm';
 
-function isUp() {
+async function isUp() {
   return isReachable(`${REST_API_URL}/deployment`);
 }
 
-function existsDir(dir) {
+function exists(dir) {
   return fs.existsSync(dir);
 }
 
@@ -36,6 +36,10 @@ function downloadCamunda(camundaDir) {
 
 async function exec(executablePath, cwd, opts = {}) {
 
+  if (!exists(executablePath)) {
+    throw new Error(`ENOENT: could not find ${executablePath}`);
+  }
+
   const subprocess = execa(executablePath, {
     cwd,
     detached: true,
@@ -46,14 +50,16 @@ async function exec(executablePath, cwd, opts = {}) {
   subprocess.unref();
 }
 
-async function runCamunda(camundaDir, cwd, script) {
+async function runCamunda(camundaDist, cwd, script) {
+
+  const tomcatDir = findTomcat(camundaDist);
 
   // windows...
   if (process.platform === 'win32') {
-    const CATALINA_HOME = path.join(camundaDir, 'server/apache-tomcat-8.0.47');
+    const CATALINA_HOME = tomcatDir;
     const JAVA_HOME = process.env.JAVA_HOME;
 
-    const executablePath = path.join(CATALINA_HOME, `bin/${script}.bat`);
+    const executablePath = path.join(tomcatDir, `bin/${script}.bat`);
 
     return exec(executablePath, cwd, {
       env: {
@@ -65,11 +71,16 @@ async function runCamunda(camundaDir, cwd, script) {
   }
 
   // ...sane platforms
-  const executablePath = path.join(camundaDir, `server/apache-tomcat-8.0.47/bin/${script}.sh`);
+  const executablePath = path.join(tomcatDir, `bin/${script}.sh`);
 
   return exec(executablePath, cwd);
 }
 
+function findTomcat(camundaDir) {
+  const tomcatDir = fs.readdirSync(path.join(camundaDir, 'server'))[0];
+
+  return path.join(camundaDir, 'server', tomcatDir);
+}
 
 function waitUntil(fn, msg, maxWait) {
 
@@ -125,7 +136,7 @@ async function cleanup(dir) {
 
 async function startCamunda() {
 
-  if (existsDir(CAMUNDA_RUN)) {
+  if (exists(CAMUNDA_RUN)) {
     console.log('Camunda running? Attempting re-start.');
 
     await stopCamunda();
@@ -133,7 +144,7 @@ async function startCamunda() {
 
   await setup(CAMUNDA_RUN);
 
-  if (existsDir(CAMUNDA_DIST)) {
+  if (exists(CAMUNDA_DIST)) {
     console.log('Camunda found.');
   } else {
     console.log(`Camunda not found. Downloading v${CAMUNDA_VERSION} ...`);
@@ -154,7 +165,7 @@ module.exports.startCamunda = startCamunda;
 
 async function stopCamunda() {
 
-  if (!existsDir(CAMUNDA_DIST) || !existsDir(CAMUNDA_RUN)) {
+  if (!exists(CAMUNDA_DIST) || !exists(CAMUNDA_RUN)) {
     console.log('Camunda not found. Nothing to stop.');
 
     return;
