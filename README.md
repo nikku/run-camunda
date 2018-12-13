@@ -29,6 +29,16 @@ Camunda stopped.
 ```
 
 
+## Choose Camunda Version
+
+You may define the `CAMUNDA_VERSION` environment variable to decide which version to download:
+
+```sh
+set CAMUNDA_VERSION=7.10
+camunda start
+```
+
+
 ## Access Camunda
 
 Camunda is up and running on `localhost:8080` once `camunda start` completes.
