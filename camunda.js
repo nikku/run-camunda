@@ -34,13 +34,40 @@ function downloadCamunda(camundaDir) {
   return download(downloadUrl, camundaDir, { extract: true });
 }
 
-async function runCamunda(camundaDir, workDir, script) {
+async function exec(executablePath, cwd, opts = {}) {
 
-  var executable = path.join(camundaDir, `server/apache-tomcat-8.0.47/bin/${script}.sh`);
-
-  await execa(executable, {
-    cwd: workDir
+  const subprocess = execa(executablePath, {
+    cwd,
+    detached: true,
+    stdio: 'ignore',
+    ...opts
   });
+
+  subprocess.unref();
+}
+
+async function runCamunda(camundaDir, cwd, script) {
+
+  // windows...
+  if (process.platform === 'win32') {
+    const CATALINA_HOME = path.join(camundaDir, 'server/apache-tomcat-8.0.47');
+    const JAVA_HOME = process.env.JAVA_HOME;
+
+    const executablePath = path.join(CATALINA_HOME, `bin/${script}.bat`);
+
+    return exec(executablePath, cwd, {
+      env: {
+        CATALINA_HOME,
+        JAVA_HOME
+      },
+      spawn: true
+    });
+  }
+
+  // ...sane platforms
+  const executablePath = path.join(camundaDir, `server/apache-tomcat-8.0.47/bin/${script}.sh`);
+
+  return exec(executablePath, cwd);
 }
 
 
@@ -117,7 +144,7 @@ async function startCamunda() {
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'startup');
 
-  await waitUntil(isUp, 'Waiting for Camunda to be up...', 60000);
+  await waitUntil(isUp, 'Waiting for Camunda to be up...', 120000);
 
   console.log('Camunda started.');
 }
