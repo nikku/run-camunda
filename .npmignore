@@ -2,5 +2,5 @@ tmp
 .eslintrc
 .eslintignore
 .travis.yml
-CHANGELOG.md
+appveyor.yml
 test.js
