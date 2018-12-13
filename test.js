@@ -18,6 +18,8 @@ async function test() {
 
   await cleanup();
 
+  await stopCamunda();
+
   await startCamunda();
 
   await startCamunda();
