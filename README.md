@@ -29,6 +29,18 @@ Camunda stopped.
 ```
 
 
+## Run Directly
+
+You may run the utility directly without prior installation via `npx`:
+
+```sh
+$ npx run-camunda start
+Camunda not found. Downloading Camunda v7.10 ...
+Starting Camunda ...
+Camunda started.
+```
+
+
 ## Choose Camunda Version
 
 You may define the `CAMUNDA_VERSION` environment variable to decide which version to download:
