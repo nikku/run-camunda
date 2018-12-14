@@ -6,6 +6,11 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.0.0
+
+* `FEAT`: download Camunda `v7.10` per default
+* `FEAT`: add ability to use utility via `npx`
+
 ## 1.3.0
 
 * `FEAT`: support arbitrary Camunda versions
