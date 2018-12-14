@@ -10,13 +10,13 @@ Download, spin up and shutdown [Camunda](https://camunda.org/) painlessly from N
 
 Install `run-camunda` globally or as a local dev dependency:
 
-```
+```sh
 npm install -g run-camunda
 ```
 
 Use the provided `camunda` command to start and stop [Camunda](https://camunda.org/):
 
-```bash
+```sh
 $ camunda start
 Camunda not found. Downloading Camunda v7.8 ...
 Starting Camunda ...
