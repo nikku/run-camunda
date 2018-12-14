@@ -17,24 +17,48 @@ const TMP_DIR = path.join(__dirname + '/tmp');
 const CAMUNDA_DIST = path.join(TMP_DIR + '/dist');
 const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
 
+const DEBUG = process.env.DEBUG;
+
 const REST_API_URL = 'http://localhost:8080/engine-rest';
 const DOWNLOAD_BASE = 'https://camunda.org/release/camunda-bpm';
 
+
+DEBUG && console.debug(`
+  CAMUNDA_VERSION: ${CAMUNDA_VERSION}
+
+  CAMUNDA_DIST: ${CAMUNDA_DIST}
+  CAMUNDA_RUN: ${CAMUNDA_RUN}
+`);
+
 async function isUp() {
-  return isReachable(`${REST_API_URL}/deployment`);
+  const url = `${REST_API_URL}/deployment`;
+
+  const up = await isReachable(url);
+
+  DEBUG && console.debug(`${url} up? ${up}`);
+
+  return up;
 }
 
 function exists(dir) {
-  return fs.existsSync(dir);
+  const exists = fs.existsSync(dir);
+
+  DEBUG && console.debug(`${dir} exists? ${exists}`);
+
+  return exists;
 }
 
 function downloadCamunda(camundaDir) {
   const downloadUrl = `${DOWNLOAD_BASE}/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
 
+  DEBUG && console.debug(`fetching ${downloadUrl} and extracting to ${camundaDir}`);
+
   return download(downloadUrl, camundaDir, { extract: true });
 }
 
 async function exec(executablePath, cwd, opts = {}) {
+
+  DEBUG && console.debug(`executing ${executablePath} from ${cwd}`);
 
   if (!exists(executablePath)) {
     throw new Error(`ENOENT: could not find ${executablePath}`);
@@ -79,7 +103,11 @@ async function runCamunda(camundaDist, cwd, script) {
 function findTomcat(camundaDir) {
   const tomcatDir = fs.readdirSync(path.join(camundaDir, 'server'))[0];
 
-  return path.join(camundaDir, 'server', tomcatDir);
+  const tomcatPath = path.join(camundaDir, 'server', tomcatDir);
+
+  DEBUG && console.debug(`found tomcat in ${tomcatPath}`);
+
+  return tomcatPath;
 }
 
 function waitUntil(fn, msg, maxWait) {
@@ -131,6 +159,8 @@ async function setup(dir) {
 }
 
 async function cleanup(dir) {
+  DEBUG && console.debug(`cleaning directory ${dir}`);
+
   await del([ dir ]);
 }
 
