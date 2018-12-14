@@ -12,7 +12,7 @@ const del = require('del');
 
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.10';
 
-const TMP_DIR = path.join(__dirname + '/tmp');
+const TMP_DIR = path.join(process.cwd(), '.run-camunda');
 
 const CAMUNDA_DIST = path.join(TMP_DIR + '/dist');
 const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
