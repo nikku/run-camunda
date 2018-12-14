@@ -3,4 +3,4 @@ node_js:
   - node
 
 script:
-  - npm run all
+  - DEBUG=1 npm run all
