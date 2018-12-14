@@ -11,10 +11,10 @@
     "url": "git+https://github.com/nikku/run-camunda.git"
   },
   "scripts": {
-    "all": "run-s lint test test-latest",
+    "all": "run-s lint test test-7-8",
     "lint": "eslint .",
     "test": "node test.js",
-    "test-latest": "cross-env CAMUNDA_VERSION=7.10 node test"
+    "test-7-8": "cross-env CAMUNDA_VERSION=7.8 node test"
   },
   "keywords": [
     "camunda",

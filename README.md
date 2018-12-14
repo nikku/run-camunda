@@ -18,7 +18,7 @@ Use the provided `camunda` command to start and stop [Camunda](https://camunda.o
 
 ```sh
 $ camunda start
-Camunda not found. Downloading Camunda v7.8 ...
+Camunda not found. Downloading Camunda v7.10 ...
 Starting Camunda ...
 Camunda started.
 
@@ -34,7 +34,7 @@ Camunda stopped.
 You may define the `CAMUNDA_VERSION` environment variable to decide which version to download:
 
 ```sh
-set CAMUNDA_VERSION=7.10
+set CAMUNDA_VERSION=7.8
 camunda start
 ```
 
