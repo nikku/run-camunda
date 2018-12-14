@@ -1,5 +1,6 @@
 environment:
   nodejs_version: "8"
+  DEBUG: "1"
 
 install:
   - ps: Install-Product node $env:nodejs_version
