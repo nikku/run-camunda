@@ -6,6 +6,11 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 1.3.0
+
+* `FEAT`: support arbitrary Camunda versions
+* `FEAT`: support Windows
+
 ## 1.2.2
 
 * `CHORE`: link repository in `package.json`
