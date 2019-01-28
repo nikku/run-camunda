@@ -53,7 +53,7 @@ camunda start
 
 ## Access Camunda
 
-Camunda is up and running on `localhost:8080` once `camunda start` completes.
+Camunda is up and running on [http://localhost:8080](http://localhost:8080) once `camunda start` completes.
 
 ### REST API
 
@@ -93,7 +93,7 @@ Use `pretest` and `posttest` hooks in your project's `package.json` to integrate
 
 ## Related
 
-
+/camunda-worker-node#control-life-cycle
 ### Resources
 
 * [Camunda documentation](https://docs.camunda.org/manual/latest/) / [external tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/)
