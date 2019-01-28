@@ -10,7 +10,7 @@ const mkdirp = require('mkdirp');
 
 const del = require('del');
 
-const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.10';
+const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.11';
 
 const TMP_DIR = path.join(process.cwd(), '.run-camunda');
 
