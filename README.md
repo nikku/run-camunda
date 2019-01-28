@@ -93,7 +93,6 @@ Use `pretest` and `posttest` hooks in your project's `package.json` to integrate
 
 ## Related
 
-/camunda-worker-node#control-life-cycle
 ### Resources
 
 * [Camunda documentation](https://docs.camunda.org/manual/latest/) / [external tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/)
