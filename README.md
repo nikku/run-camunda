@@ -53,11 +53,11 @@ camunda start
 
 ## Access Camunda
 
-Camunda is up and running on [http://localhost:8080](http://localhost:8080) once `camunda start` completes.
+Camunda is up and running on [`http://localhost:8080`](http://localhost:8080) once `camunda start` completes.
 
 ### REST API
 
-Access the Camunda instance via the [Camunda REST API](https://docs.camunda.org/manual/latest/reference/rest/overview/distro-use/), available at `http://localhost:8080/engine-rest`.
+Access the Camunda instance via the [Camunda REST API](https://docs.camunda.org/manual/latest/reference/rest/overview/distro-use/), available at [`http://localhost:8080/engine-rest`](http://localhost:8080/engine-rest).
 
 Refer to the [Camunda documentation](https://docs.camunda.org/manual/latest/reference/rest/) to learn how to deploy and run your processes. Checkout [camunda-worker-node](https://github.com/nikku/camunda-worker-node) for a simple way to contribute work via [external tasks](https://docs.camunda.org/manual/latest/user-guide/process-engine/external-tasks/).
 
