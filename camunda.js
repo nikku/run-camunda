@@ -145,7 +145,7 @@ function wait(s) {
 }
 
 async function setup(dir) {
-  mkdirp.sync(CAMUNDA_RUN);
+  mkdirp.sync(dir);
 }
 
 async function cleanup(dir) {
@@ -218,3 +218,10 @@ async function isCamundaRunning() {
 }
 
 module.exports.isCamundaRunning = isCamundaRunning;
+
+
+async function isCamundaLocal() {
+  return exists(CAMUNDA_RUN);
+}
+
+module.exports.isCamundaLocal = isCamundaLocal;

@@ -7,7 +7,8 @@ const assert = require('assert');
 const {
   startCamunda,
   stopCamunda,
-  isCamundaRunning
+  isCamundaRunning,
+  isCamundaLocal
 } = require('.');
 
 
@@ -21,9 +22,13 @@ async function test() {
 
   await cleanup();
 
+  assert.ok(!await isCamundaLocal(), 'Camunda is not locally available');
+
   await stopCamunda();
 
   await startCamunda();
+
+  assert.ok(await isCamundaLocal(), 'Camunda is locally available');
 
   assert.ok(await isCamundaRunning(), 'Camunda is up');
 
