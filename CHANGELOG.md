@@ -6,6 +6,10 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 2.1.1
+
+* `CHORE`: expose main entry point
+
 ## 2.1.0
 
 * `CHORE`: bump dependencies
