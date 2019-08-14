@@ -5,7 +5,7 @@ const path = require('path');
 const {
   startCamunda,
   stopCamunda
-} = require('./camunda');
+} = require('.');
 
 
 async function cleanup() {

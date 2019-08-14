@@ -2,7 +2,7 @@
   "name": "run-camunda",
   "version": "2.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "camunda.js",
   "bin": {
     "camunda": "./cli.js"
   },
