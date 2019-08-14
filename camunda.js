@@ -30,16 +30,6 @@ DEBUG && console.debug(`
   CAMUNDA_RUN: ${CAMUNDA_RUN}
 `);
 
-async function isUp() {
-  const url = `${REST_API_URL}/deployment`;
-
-  const up = await isReachable(url);
-
-  DEBUG && console.debug(`${url} up? ${up}`);
-
-  return up;
-}
-
 function exists(dir) {
   const exists = fs.existsSync(dir);
 
@@ -185,7 +175,7 @@ async function startCamunda() {
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'startup');
 
-  await waitUntil(isUp, 'Waiting for Camunda to be up...', 120000);
+  await waitUntil(isCamundaRunning, 'Waiting for Camunda to be up...', 120000);
 
   console.log('Camunda started.');
 }
@@ -215,3 +205,16 @@ async function stopCamunda() {
 }
 
 module.exports.stopCamunda = stopCamunda;
+
+
+async function isCamundaRunning() {
+  const url = `${REST_API_URL}/deployment`;
+
+  const up = await isReachable(url);
+
+  DEBUG && console.debug(`${url} up? ${up}`);
+
+  return up;
+}
+
+module.exports.isCamundaRunning = isCamundaRunning;

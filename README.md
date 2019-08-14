@@ -41,6 +41,21 @@ Camunda started.
 ```
 
 
+## Use via API
+
+```javascript
+const {
+  startCamunda,
+  stopCamunda,
+  isCamundaRunning
+} = require('run-camunda');
+
+await startCamunda();
+await isCamundaRunning();
+await stopCamunda();
+```
+
+
 ## Choose Camunda Version
 
 You may define the `CAMUNDA_VERSION` environment variable to decide which version to download:
