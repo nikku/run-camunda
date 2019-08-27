@@ -1,4 +1,4 @@
-const del = require('del');
+const rimraf = require('rimraf');
 
 const path = require('path');
 
@@ -13,9 +13,7 @@ const {
 
 
 async function cleanup() {
-  await del([
-    path.join(__dirname, 'tmp')
-  ]);
+  rimraf.sync(path.join(__dirname, 'tmp'));
 }
 
 async function test() {

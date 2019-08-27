@@ -8,7 +8,7 @@ const download = require('download');
 
 const mkdirp = require('mkdirp');
 
-const del = require('del');
+const rimraf = require('rimraf');
 
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.10';
 
@@ -151,7 +151,7 @@ async function setup(dir) {
 async function cleanup(dir) {
   DEBUG && console.debug(`cleaning directory ${dir}`);
 
-  await del([ dir ]);
+  rimraf.sync(dir);
 }
 
 async function startCamunda() {
