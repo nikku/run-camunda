@@ -2,7 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const execa = require('execa');
 
-const isReachable = require('is-reachable');
+const {
+  isReachable
+} = require('./support');
 
 const download = require('download');
 
