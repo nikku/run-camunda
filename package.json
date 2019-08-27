@@ -37,7 +37,7 @@
     "del": "^3.0.0",
     "download": "^7.1.0",
     "execa": "^1.0.0",
-    "is-reachable": "^3.0.0",
+    "is-reachable": "^2.4.0",
     "mkdirp": "^0.5.1"
   }
 }
