@@ -13,7 +13,7 @@ const {
 
 
 async function cleanup() {
-  rimraf.sync(path.join(__dirname, 'tmp'));
+  rimraf.sync(path.join(__dirname, '.run-camunda'));
 }
 
 async function test() {
