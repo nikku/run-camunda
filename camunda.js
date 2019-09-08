@@ -43,14 +43,14 @@ function exists(dir) {
 function downloadCamunda(camundaDir) {
   const downloadUrl = `${DOWNLOAD_BASE}/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
 
-  DEBUG && console.debug(`fetching ${downloadUrl} and extracting to ${camundaDir}`);
+  DEBUG && console.debug(`Fetching ${downloadUrl} and extracting to ${camundaDir}`);
 
   return download(downloadUrl, camundaDir, { extract: true });
 }
 
 async function exec(executablePath, cwd, opts = {}) {
 
-  DEBUG && console.debug(`executing ${executablePath} from ${cwd}`);
+  DEBUG && console.debug(`Executing ${executablePath} from ${cwd}`);
 
   if (!exists(executablePath)) {
     throw new Error(`ENOENT: could not find ${executablePath}`);
@@ -97,7 +97,7 @@ function findTomcat(camundaDir) {
 
   const tomcatPath = path.join(camundaDir, 'server', tomcatDir);
 
-  DEBUG && console.debug(`found tomcat in ${tomcatPath}`);
+  DEBUG && console.debug(`Found Tomcat in ${tomcatPath}`);
 
   return tomcatPath;
 }
@@ -123,7 +123,7 @@ function waitUntil(fn, msg, maxWait) {
           resolve();
         } else {
           if (msg) {
-            console.log(msg);
+            process.stdout.write(msg);
           }
 
           if (typeof maxWait === 'number') {
@@ -151,7 +151,7 @@ async function setup(dir) {
 }
 
 async function cleanup(dir) {
-  DEBUG && console.debug(`cleaning directory ${dir}`);
+  DEBUG && console.debug(`Cleaning directory ${dir}`);
 
   rimraf.sync(dir);
 }
@@ -159,26 +159,25 @@ async function cleanup(dir) {
 async function startCamunda() {
 
   if (exists(CAMUNDA_RUN)) {
-    console.log('Camunda running? Attempting re-start.');
+    console.log('Camunda running? Attempting re-start');
 
     await stopCamunda();
   }
 
   await setup(CAMUNDA_RUN);
 
-  if (exists(CAMUNDA_DIST)) {
-    console.log('Camunda found.');
-  } else {
-    console.log(`Camunda not found. Downloading v${CAMUNDA_VERSION} ...`);
+  if (!exists(CAMUNDA_DIST)) {
+    console.log(`Downloading Camunda v${CAMUNDA_VERSION}...`);
     await downloadCamunda(CAMUNDA_DIST);
   }
 
-  console.log('Starting Camunda ...');
+  process.stdout.write('Starting Camunda...');
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'startup');
 
-  await waitUntil(isCamundaRunning, 'Waiting for Camunda to be up...', 120000);
+  await waitUntil(isCamundaRunning, '.', 120000);
 
+  console.log();
   console.log('Camunda started.');
 }
 
@@ -187,19 +186,19 @@ module.exports.startCamunda = startCamunda;
 
 async function stopCamunda() {
 
-  if (!exists(CAMUNDA_DIST) || !exists(CAMUNDA_RUN)) {
-    console.log('Camunda not found. Nothing to stop.');
+  if (!exists(CAMUNDA_RUN)) {
+    console.log('Camunda not found, nothing to stop');
 
     return;
   }
 
-  console.log('Stopping Camunda ...');
+  console.log('Stopping Camunda...');
 
   await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'shutdown');
 
   await wait(1);
 
-  console.log('Cleaning up ...');
+  console.log('Cleaning up...');
 
   await cleanup(CAMUNDA_RUN);
 
