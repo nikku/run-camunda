@@ -6,6 +6,11 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 3.1.0
+
+* `CHORE`: simplify log output
+* `CHORE`: drop `is-reachable` dependency to further reduce log output
+
 ## 3.0.0
 
 * `FEAT`: download Camunda `v7.11` per default
