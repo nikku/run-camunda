@@ -1,7 +1,7 @@
 # run-camunda
 
 [![Build Status](https://travis-ci.org/nikku/run-camunda.svg?branch=master)](https://travis-ci.org/nikku/run-camunda)
-[![Camunda Compatibility](https://img.shields.io/badge/Camunda-7.8%20%7C%207.10-blue.svg)](#choose-camunda-version)
+[![Camunda Compatibility](https://img.shields.io/badge/Camunda-7.8+-blue.svg)](#choose-camunda-version)
 
 Download, spin up and shutdown [Camunda](https://camunda.org/) painlessly from Node.
 
