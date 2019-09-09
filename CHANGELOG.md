@@ -6,6 +6,11 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 3.2.0
+
+* `CHORE`: update `got`
+* `CHORE`: reduce bundle size by replacing `download` with `got` + `tar`
+
 ## 3.1.0
 
 * `CHORE`: simplify log output
