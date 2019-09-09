@@ -1,4 +1,15 @@
+const stream = require('stream');
+
+const {
+  promisify
+} = require('util');
+
 const got = require('got');
+
+const pipeline = promisify(stream.pipeline);
+
+const tar = require('tar');
+
 
 async function isReachable(url) {
 
@@ -12,3 +23,16 @@ async function isReachable(url) {
 }
 
 module.exports.isReachable = isReachable;
+
+
+async function download(url, directory) {
+
+  return pipeline(
+    got.stream(url),
+    tar.extract({
+      cwd: directory
+    })
+  );
+}
+
+module.exports.download = download;

@@ -3,10 +3,9 @@ const fs = require('fs');
 const execa = require('execa');
 
 const {
-  isReachable
+  isReachable,
+  download
 } = require('./support');
-
-const download = require('download');
 
 const mkdirp = require('mkdirp');
 
@@ -43,9 +42,10 @@ function exists(dir) {
 function downloadCamunda(camundaDir) {
   const downloadUrl = `${DOWNLOAD_BASE}/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
 
+
   DEBUG && console.debug(`Fetching ${downloadUrl} and extracting to ${camundaDir}`);
 
-  return download(downloadUrl, camundaDir, { extract: true });
+  return download(downloadUrl, camundaDir);
 }
 
 async function exec(executablePath, cwd, opts = {}) {
@@ -167,6 +167,8 @@ async function startCamunda() {
   await setup(CAMUNDA_RUN);
 
   if (!exists(CAMUNDA_DIST)) {
+    await setup(CAMUNDA_DIST);
+
     console.log(`Downloading Camunda v${CAMUNDA_VERSION}...`);
     await downloadCamunda(CAMUNDA_DIST);
   }
