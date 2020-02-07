@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "8"
+  nodejs_version: "12"
   DEBUG: "1"
 
 install:
