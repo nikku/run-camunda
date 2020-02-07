@@ -11,7 +11,7 @@ const mkdirp = require('mkdirp');
 
 const rimraf = require('rimraf');
 
-const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.11';
+const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.12';
 
 const TMP_DIR = path.join(process.cwd(), '.run-camunda');
 
