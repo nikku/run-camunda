@@ -11,17 +11,32 @@ const mkdirp = require('mkdirp');
 
 const rimraf = require('rimraf');
 
-const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.12';
+const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.13';
+
+const JAVA_HOME = process.env.JAVA_HOME;
+
+if (CAMUNDA_VERSION < '7.13') {
+  console.error(
+    `Incompatible Camunda version: ${CAMUNDA_VERSION}. ` +
+    'Please use run-camunda<=4.0.0 to start Camunda<7.13.'
+  );
+
+  process.exit(1);
+}
+
+const IS_WINDOWS = process.platform === 'win32';
 
 const TMP_DIR = path.join(process.cwd(), '.run-camunda');
 
 const CAMUNDA_DIST = path.join(TMP_DIR + '/dist');
 const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
 
+const PID_FILE = path.join(CAMUNDA_RUN, 'pid');
+
 const DEBUG = process.env.DEBUG;
 
 const REST_API_URL = 'http://localhost:8080/engine-rest';
-const DOWNLOAD_BASE = 'https://camunda.org/release/camunda-bpm';
+const DOWNLOAD_BASE = 'https://downloads.camunda.cloud/release';
 
 
 DEBUG && console.debug(`
@@ -40,66 +55,77 @@ function exists(dir) {
 }
 
 function downloadCamunda(camundaDir) {
-  const downloadUrl = `${DOWNLOAD_BASE}/tomcat/${CAMUNDA_VERSION}/camunda-bpm-tomcat-${CAMUNDA_VERSION}.0.tar.gz`;
-
+  const downloadUrl = `${DOWNLOAD_BASE}/camunda-bpm/run/${CAMUNDA_VERSION}/camunda-bpm-run-${CAMUNDA_VERSION}.0.tar.gz`;
 
   DEBUG && console.debug(`Fetching ${downloadUrl} and extracting to ${camundaDir}`);
 
   return download(downloadUrl, camundaDir);
 }
 
-async function exec(executablePath, cwd, opts = {}) {
+async function exec(executablePath, args, opts = {}) {
 
-  DEBUG && console.debug(`Executing ${executablePath} from ${cwd}`);
+  DEBUG && console.debug(`Executing ${executablePath} with args ${args}`, opts);
 
   if (!exists(executablePath)) {
     throw new Error(`ENOENT: could not find ${executablePath}`);
   }
 
-  const subprocess = execa(executablePath, {
-    cwd,
+  const subprocess = execa(executablePath, args, {
     detached: true,
     stdio: 'ignore',
     ...opts
   });
 
+  const { pid } = subprocess;
+
   subprocess.unref();
+
+  return { pid };
 }
 
-async function runCamunda(camundaDist, cwd, script) {
+async function runCamunda(camundaDist, cwd) {
 
-  const tomcatDir = findTomcat(camundaDist);
+  DEBUG && JAVA_HOME && console.debug('Using java provided by JAVA_HOME');
 
-  // windows...
-  if (process.platform === 'win32') {
-    const CATALINA_HOME = tomcatDir;
-    const JAVA_HOME = process.env.JAVA_HOME;
+  const javaBinary = JAVA_HOME ? path.join(JAVA_HOME, 'bin/java' + (IS_WINDOWS ? '.exe' : '')) : 'java';
 
-    const executablePath = path.join(tomcatDir, `bin/${script}.bat`);
+  const classPath = [
+    'configuration/userlib',
+    'configuration/keystore',
+    'internal/webapps',
+    'internal/rest'
+  ].map(p => path.join(camundaDist, p)).join(',');
 
-    return exec(executablePath, cwd, {
-      env: {
-        CATALINA_HOME,
-        JAVA_HOME
-      },
-      spawn: true
-    });
-  }
+  const deploymentDir = path.join(camundaDist, 'configuration/resources');
 
-  // ...sane platforms
-  const executablePath = path.join(tomcatDir, `bin/${script}.sh`);
+  const configPath = path.join(camundaDist, 'configuration/default.yml');
 
-  return exec(executablePath, cwd);
-}
+  const runJarPath = path.join(camundaDist, 'internal/camunda-bpm-run-core.jar');
 
-function findTomcat(camundaDir) {
-  const tomcatDir = fs.readdirSync(path.join(camundaDir, 'server'))[0];
+  const javaArgs = [
+    `-Dloader.path=${classPath}`,
+    `-Dcamunda.deploymentDir=${deploymentDir}`,
+    '-jar', runJarPath,
+    `--spring.config.location=file:${configPath}`
+  ];
 
-  const tomcatPath = path.join(camundaDir, 'server', tomcatDir);
+  const execOptions = IS_WINDOWS ? {
+    env: {
+      JAVA_HOME
+    },
+    spawn: true,
+    cwd
+  } : {
+    cwd
+  };
 
-  DEBUG && console.debug(`Found Tomcat in ${tomcatPath}`);
+  const { pid } = await exec(javaBinary, javaArgs, execOptions);
 
-  return tomcatPath;
+  DEBUG && console.debug(`Writing PID ${pid} to file ${PID_FILE}`);
+
+  fs.writeFileSync(PID_FILE, String(pid), 'utf-8');
+
+  return { pid };
 }
 
 function waitUntil(fn, msg, maxWait) {
@@ -158,8 +184,8 @@ async function cleanup(dir) {
 
 async function startCamunda() {
 
-  if (exists(CAMUNDA_RUN)) {
-    console.log('Camunda running? Attempting re-start');
+  if (exists(PID_FILE)) {
+    console.log('Camunda is already running, restarting it.');
 
     await stopCamunda();
   }
@@ -180,7 +206,7 @@ async function startCamunda() {
   await waitUntil(isCamundaRunning, '.', 120000);
 
   console.log();
-  console.log('Camunda started.');
+  console.log('Camunda started on http://localhost:8080/');
 }
 
 module.exports.startCamunda = startCamunda;
@@ -188,7 +214,7 @@ module.exports.startCamunda = startCamunda;
 
 async function stopCamunda() {
 
-  if (!exists(CAMUNDA_RUN)) {
+  if (!exists(PID_FILE)) {
     console.log('Camunda not found, nothing to stop');
 
     return;
@@ -196,7 +222,7 @@ async function stopCamunda() {
 
   console.log('Stopping Camunda...');
 
-  await runCamunda(CAMUNDA_DIST, CAMUNDA_RUN, 'shutdown');
+  await killCamunda();
 
   await wait(1);
 
@@ -209,6 +235,21 @@ async function stopCamunda() {
 
 module.exports.stopCamunda = stopCamunda;
 
+
+function killCamunda() {
+
+  try {
+    const pid = parseInt(fs.readFileSync(PID_FILE, 'utf8'), 10);
+
+    DEBUG && console.debug(`sending SIGHUP to ${pid}`);
+
+    process.kill(pid, 'SIGHUP');
+  } catch (err) {
+    DEBUG && console.error('failed to kill Camunda', err);
+  }
+
+  fs.unlinkSync(PID_FILE);
+}
 
 async function isCamundaRunning() {
   const url = `${REST_API_URL}/deployment`;

@@ -1,7 +1,7 @@
 # run-camunda
 
 [![Build Status](https://travis-ci.com/nikku/run-camunda.svg?branch=master)](https://travis-ci.com/nikku/run-camunda)
-[![Camunda Compatibility](https://img.shields.io/badge/Camunda-7.8+-blue.svg)](#choose-camunda-version)
+[![Camunda Compatibility](https://img.shields.io/badge/Camunda-7.13+-blue.svg)](#choose-camunda-version)
 
 Download, spin up and shutdown [Camunda](https://camunda.org/) painlessly from Node.
 
@@ -18,7 +18,7 @@ Use the provided `camunda` command to start and stop [Camunda](https://camunda.o
 
 ```sh
 $ camunda start
-Downloading Camunda v7.12...
+Downloading Camunda v7.13...
 Starting Camunda.....
 Camunda started.
 
@@ -35,7 +35,7 @@ You may run the utility directly without prior installation via `npx`:
 
 ```sh
 $ npx run-camunda start
-Downloading Camunda v7.12...
+Downloading Camunda v7.13...
 Starting Camunda.....
 Camunda started.
 ```
@@ -61,7 +61,7 @@ await stopCamunda();
 You may define the `CAMUNDA_VERSION` environment variable to decide which version to download:
 
 ```sh
-set CAMUNDA_VERSION=7.10
+set CAMUNDA_VERSION=7.13
 camunda start
 ```
 
