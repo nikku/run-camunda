@@ -32,11 +32,15 @@ async function test() {
 
   await startCamunda();
 
+  assert.ok(await isCamundaRunning(), 'Camunda is up');
+
   await stopCamunda();
 
   assert.ok(!await isCamundaRunning(), 'Camunda is down');
 
   await stopCamunda();
+
+  assert.ok(!await isCamundaRunning(), 'Camunda is down');
 
 }
 
