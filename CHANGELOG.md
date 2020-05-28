@@ -6,6 +6,12 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 5.0.0
+
+* `FEAT`: download Camunda `v7.13` per default
+* `FEAT`: switch to Camunda BPM Run as runtime
+* `CHORE`: drop support for Camunda `<=7.12`
+
 ## 4.0.0
 
 * `FEAT`: download Camunda `v7.12` per default
