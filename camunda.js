@@ -66,7 +66,7 @@ async function exec(executablePath, args, opts = {}) {
 
   DEBUG && console.debug(`Executing ${executablePath} with args ${args}`, opts);
 
-  if (!exists(executablePath)) {
+  if (!exists(executablePath) && !exists(executablePath + '.exe')) {
     throw new Error(`ENOENT: could not find ${executablePath}`);
   }
 
@@ -87,7 +87,7 @@ async function runCamunda(camundaDist, cwd) {
 
   DEBUG && JAVA_HOME && console.debug('Using java provided by JAVA_HOME');
 
-  const javaBinary = JAVA_HOME ? path.join(JAVA_HOME, 'bin/java' + (IS_WINDOWS ? '.exe' : '')) : 'java';
+  const javaBinary = JAVA_HOME ? path.join(JAVA_HOME, 'bin/java') : 'java';
 
   const classPath = [
     'configuration/userlib',
@@ -238,12 +238,14 @@ module.exports.stopCamunda = stopCamunda;
 
 function killCamunda() {
 
+  const signal = IS_WINDOWS ? 'SIGTERM' : 'SIGHUP';
+
   try {
     const pid = parseInt(fs.readFileSync(PID_FILE, 'utf8'), 10);
 
-    DEBUG && console.debug(`sending SIGHUP to ${pid}`);
+    DEBUG && console.debug(`sending ${signal} to ${pid}`);
 
-    process.kill(pid, 'SIGHUP');
+    process.kill(pid, signal);
   } catch (err) {
     DEBUG && console.error('failed to kill Camunda', err);
   }
