@@ -1,6 +1,5 @@
+.github
 .run-camunda
 .eslintrc
 .eslintignore
-.travis.yml
-appveyor.yml
 test.js
