@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.com/nikku/run-camunda.svg?branch=master)](https://travis-ci.com/nikku/run-camunda)
 [![Camunda Compatibility](https://img.shields.io/badge/Camunda-7.13+-blue.svg)](#choose-camunda-version)
 
-Download, spin up and shutdown [Camunda](https://camunda.org/) painlessly from Node.
+Download, spin up and shutdown the [Camunda Platform](https://camunda.com/products/camunda-platform/) painlessly from Node.
 
 
 ## Usage
