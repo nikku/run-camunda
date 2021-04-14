@@ -11,7 +11,7 @@ const mkdirp = require('mkdirp');
 
 const rimraf = require('rimraf');
 
-const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.13';
+const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.15';
 
 const JAVA_HOME = process.env.JAVA_HOME;
 
