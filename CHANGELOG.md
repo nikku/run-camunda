@@ -6,6 +6,10 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 7.0.0
+
+* `FEAT`: download Camunda `v7.16` per default
+
 ## 6.0.0
 
 * `FEAT`: download Camunda `v7.15` per default
