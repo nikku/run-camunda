@@ -39,5 +39,10 @@
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2",
     "tar": "^6.1.0"
-  }
+  },
+  "files": [
+    "camunda.js",
+    "cli.js",
+    "support.js"
+  ]
 }
