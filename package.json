@@ -36,7 +36,6 @@
   "dependencies": {
     "execa": "^5.0.0",
     "got": "^11.8.2",
-    "mkdirp": "^1.0.4",
     "tar": "^6.1.0"
   },
   "files": [
