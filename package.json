@@ -42,7 +42,7 @@
   "dependencies": {
     "execa": "^9.4.1",
     "got": "^11.8.2",
-    "tar": "^6.1.0"
+    "tar": "^7.4.3"
   },
   "files": [
     "camunda.js",

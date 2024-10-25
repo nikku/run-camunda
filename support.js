@@ -2,7 +2,7 @@ import { pipeline } from 'node:stream/promises';
 
 import got from 'got';
 
-import tar from 'tar';
+import { extract } from 'tar';
 
 
 export async function isReachable(url) {
@@ -21,7 +21,7 @@ export async function download(url, directory) {
 
   return pipeline(
     got.stream(url),
-    tar.extract({
+    extract({
       cwd: directory
     })
   );
