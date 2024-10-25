@@ -7,8 +7,6 @@ const {
   download
 } = require('./support');
 
-const mkdirp = require('mkdirp');
-
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.22';
 
 const JAVA_HOME = process.env.JAVA_HOME;
@@ -171,7 +169,7 @@ function wait(s) {
 }
 
 async function setup(dir) {
-  mkdirp.sync(dir);
+  fs.mkdirSync(dir, { recursive: true });
 }
 
 async function cleanup(dir) {
