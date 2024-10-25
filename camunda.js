@@ -9,8 +9,6 @@ const {
 
 const mkdirp = require('mkdirp');
 
-const rimraf = require('rimraf');
-
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.22';
 
 const JAVA_HOME = process.env.JAVA_HOME;
@@ -179,7 +177,7 @@ async function setup(dir) {
 async function cleanup(dir) {
   DEBUG && console.debug(`Cleaning directory ${dir}`);
 
-  rimraf.sync(dir);
+  fs.rmSync(dir, { recursive: true, force: true });
 }
 
 async function startCamunda() {

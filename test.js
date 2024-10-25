@@ -1,8 +1,7 @@
-const rimraf = require('rimraf');
+const fs = require('node:fs');
+const path = require('node:path');
 
-const path = require('path');
-
-const assert = require('assert');
+const assert = require('node:assert');
 
 const {
   startCamunda,
@@ -13,7 +12,7 @@ const {
 
 
 async function cleanup() {
-  rimraf.sync(path.join(__dirname, '.run-camunda'));
+  fs.rmSync(path.join(__dirname, '.run-camunda'), { recursive: true, force: true });
 }
 
 async function test() {
