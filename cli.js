@@ -17,7 +17,7 @@ if (mode !== 'start' && mode !== 'stop') {
 }
 
 if (mode === 'start') {
-  return startCamunda().catch(function(err) {
+  startCamunda().catch(function(err) {
     console.error('Failed to start', err);
 
     process.exit(1);
