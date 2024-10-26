@@ -177,12 +177,6 @@ function waitUntil(fn, msg, maxWait) {
   });
 }
 
-function wait(s) {
-  return new Promise(function(resolve) {
-    setTimeout(resolve, s * 1000);
-  });
-}
-
 async function setup(dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
@@ -233,7 +227,7 @@ export async function stopCamunda() {
 
   await killCamunda();
 
-  await wait(1);
+  await waitUntil(() => isCamundaRunning().then(running => !running), '.', 10000);
 
   console.log('Cleaning up...');
 
