@@ -6,6 +6,18 @@ All notable changes to [run-camunda](https://github.com/nikku/run-camunda) are d
 
 ___Note:__ Yet to be released changes appear here._
 
+## 9.0.0
+
+* `FEAT`: download Camunda `v7.22` per default
+* `FEAT`: gracefully await shutdown
+* `DEPS`: update to `execa@9`
+* `DEPS`: update to `tar@7`
+* `CHORE`: turn into ES module
+
+### Breaking Changes
+
+* This package is now ESM only.
+
 ## 8.0.0
 
 * `FEAT`: download Camunda `v7.19` per default
