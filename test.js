@@ -1,18 +1,20 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import fs from 'node:fs';
+import assert from 'node:assert';
 
-const assert = require('node:assert');
+import { fileURLToPath } from 'node:url';
 
-const {
+import {
   startCamunda,
   stopCamunda,
   isCamundaRunning,
   isCamundaLocal
-} = require('.');
+} from 'run-camunda';
 
 
 async function cleanup() {
-  fs.rmSync(path.join(__dirname, '.run-camunda'), { recursive: true, force: true });
+  const filePath = fileURLToPath(new URL('.run-camunda', import.meta.url));
+
+  fs.rmSync(filePath, { recursive: true, force: true });
 }
 
 async function test() {

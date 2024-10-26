@@ -2,9 +2,15 @@
   "name": "run-camunda",
   "version": "8.0.0",
   "description": "",
-  "main": "camunda.js",
+  "type": "module",
   "bin": {
     "camunda": "./cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./camunda.js"
+    },
+    "./package.json": "./package.json"
   },
   "repository": {
     "type": "git",
