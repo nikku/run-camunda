@@ -1,17 +1,11 @@
-const stream = require('stream');
+import { pipeline } from 'node:stream/promises';
 
-const {
-  promisify
-} = require('util');
+import got from 'got';
 
-const got = require('got');
-
-const pipeline = promisify(stream.pipeline);
-
-const tar = require('tar');
+import tar from 'tar';
 
 
-async function isReachable(url) {
+export async function isReachable(url) {
 
   try {
     await got(url, { timeout: 1000 });
@@ -22,10 +16,8 @@ async function isReachable(url) {
   }
 }
 
-module.exports.isReachable = isReachable;
 
-
-async function download(url, directory) {
+export async function download(url, directory) {
 
   return pipeline(
     got.stream(url),
@@ -34,5 +26,3 @@ async function download(url, directory) {
     })
   );
 }
-
-module.exports.download = download;

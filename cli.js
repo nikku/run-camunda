@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const {
+import {
   startCamunda,
   stopCamunda
-} = require('./camunda');
+} from 'run-camunda';
 
 
 var argv = process.argv;

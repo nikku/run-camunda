@@ -1,11 +1,11 @@
-const path = require('path');
-const fs = require('fs');
-const execa = require('execa');
+import path from 'node:path';
+import fs from 'node:fs';
+import execa from 'execa';
 
-const {
+import {
   isReachable,
   download
-} = require('./support');
+} from './support.js';
 
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.22';
 
@@ -178,7 +178,7 @@ async function cleanup(dir) {
   fs.rmSync(dir, { recursive: true, force: true });
 }
 
-async function startCamunda() {
+export async function startCamunda() {
 
   if (exists(PID_FILE)) {
     console.log('Camunda is already running, restarting it.');
@@ -205,10 +205,8 @@ async function startCamunda() {
   console.log('Camunda started on http://localhost:8080/');
 }
 
-module.exports.startCamunda = startCamunda;
 
-
-async function stopCamunda() {
+export async function stopCamunda() {
 
   if (!exists(PID_FILE)) {
     console.log('Camunda not found, nothing to stop');
@@ -229,8 +227,6 @@ async function stopCamunda() {
   console.log('Camunda stopped.');
 }
 
-module.exports.stopCamunda = stopCamunda;
-
 
 function killCamunda() {
 
@@ -246,10 +242,10 @@ function killCamunda() {
     DEBUG && console.error('failed to kill Camunda', err);
   }
 
-  fs.unlinkSync(PID_FILE);
+  fs.rmSync(PID_FILE);
 }
 
-async function isCamundaRunning() {
+export async function isCamundaRunning() {
   const url = `${REST_API_URL}/deployment`;
 
   const up = await isReachable(url);
@@ -259,11 +255,6 @@ async function isCamundaRunning() {
   return up;
 }
 
-module.exports.isCamundaRunning = isCamundaRunning;
-
-
-async function isCamundaLocal() {
+export async function isCamundaLocal() {
   return exists(CAMUNDA_RUN);
 }
-
-module.exports.isCamundaLocal = isCamundaLocal;
