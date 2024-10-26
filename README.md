@@ -45,11 +45,11 @@ Camunda started.
 ## Use via API
 
 ```javascript
-const {
+import {
   startCamunda,
   stopCamunda,
   isCamundaRunning
-} = require('run-camunda');
+} from 'run-camunda';
 
 await startCamunda();
 await isCamundaRunning();
