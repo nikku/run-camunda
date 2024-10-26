@@ -7,6 +7,8 @@ import {
   download
 } from './support.js';
 
+const debug = createLogger('run-camunda');
+
 const CAMUNDA_VERSION = process.env.CAMUNDA_VERSION || '7.22';
 
 const JAVA_HOME = process.env.JAVA_HOME;
@@ -29,23 +31,32 @@ const CAMUNDA_RUN = path.join(TMP_DIR + '/run');
 
 const PID_FILE = path.join(CAMUNDA_RUN, 'pid');
 
-const DEBUG = process.env.DEBUG;
-
 const REST_API_URL = 'http://localhost:8080/engine-rest';
 const DOWNLOAD_BASE = 'https://downloads.camunda.cloud/release';
 
 
-DEBUG && console.debug(`
-  CAMUNDA_VERSION: ${CAMUNDA_VERSION}
+debug('environment', {
+  CAMUNDA_VERSION,
+  CAMUNDA_DIST,
+  CAMUNDA_RUN
+});
 
-  CAMUNDA_DIST: ${CAMUNDA_DIST}
-  CAMUNDA_RUN: ${CAMUNDA_RUN}
-`);
+
+function createLogger(name) {
+
+  if (/\*|run-camunda/.test(process.env.DEBUG)) {
+    return (msg, ...args) => {
+      console.debug(`[${name}] ${msg}`, ...args);
+    };
+  }
+
+  return () => {};
+}
 
 function exists(dir) {
   const exists = fs.existsSync(dir);
 
-  DEBUG && console.debug(`${dir} exists? ${exists}`);
+  debug('%s exists? %s', dir, exists);
 
   return exists;
 }
@@ -53,14 +64,14 @@ function exists(dir) {
 function downloadCamunda(camundaDir) {
   const downloadUrl = `${DOWNLOAD_BASE}/camunda-bpm/run/${CAMUNDA_VERSION}/camunda-bpm-run-${CAMUNDA_VERSION}.0.tar.gz`;
 
-  DEBUG && console.debug(`Fetching ${downloadUrl} and extracting to ${camundaDir}`);
+  debug('fetching %s and extracting to %s', downloadUrl, camundaDir);
 
   return download(downloadUrl, camundaDir);
 }
 
 async function exec(executablePath, args, opts = {}) {
 
-  DEBUG && console.debug(`Executing ${executablePath} with args ${args}`, opts);
+  debug('executing %s with args %s', executablePath, args, opts);
 
   if (!exists(executablePath) && !exists(executablePath + '.exe')) {
     throw new Error(`ENOENT: could not find ${executablePath}`);
@@ -72,6 +83,10 @@ async function exec(executablePath, args, opts = {}) {
     ...opts
   });
 
+  subprocess.catch(err => {
+    debug('subprocess ERROR', err);
+  });
+
   const { pid } = subprocess;
 
   subprocess.unref();
@@ -81,7 +96,7 @@ async function exec(executablePath, args, opts = {}) {
 
 async function runCamunda(camundaDist, cwd) {
 
-  DEBUG && JAVA_HOME && console.debug('Using java provided by JAVA_HOME');
+  JAVA_HOME && debug('using java provided by JAVA_HOME');
 
   const javaBinary = JAVA_HOME ? path.join(JAVA_HOME, 'bin/java') : 'java';
 
@@ -117,7 +132,7 @@ async function runCamunda(camundaDist, cwd) {
 
   const { pid } = await exec(javaBinary, javaArgs, execOptions);
 
-  DEBUG && console.debug(`Writing PID ${pid} to file ${PID_FILE}`);
+  debug('writing PID %s to %s', pid, PID_FILE);
 
   fs.writeFileSync(PID_FILE, String(pid), 'utf-8');
 
@@ -173,7 +188,7 @@ async function setup(dir) {
 }
 
 async function cleanup(dir) {
-  DEBUG && console.debug(`Cleaning directory ${dir}`);
+  debug('cleaning %s', dir);
 
   fs.rmSync(dir, { recursive: true, force: true });
 }
@@ -235,11 +250,11 @@ function killCamunda() {
   try {
     const pid = parseInt(fs.readFileSync(PID_FILE, 'utf8'), 10);
 
-    DEBUG && console.debug(`sending ${signal} to ${pid}`);
+    debug('sending %s to %s', signal, pid);
 
     process.kill(pid, signal);
   } catch (err) {
-    DEBUG && console.error('failed to kill Camunda', err);
+    debug('failed to kill', err);
   }
 
   fs.rmSync(PID_FILE);
@@ -250,7 +265,7 @@ export async function isCamundaRunning() {
 
   const up = await isReachable(url);
 
-  DEBUG && console.debug(`${url} up? ${up}`);
+  debug('%s up? %s', url, up);
 
   return up;
 }

@@ -19,7 +19,7 @@
   "scripts": {
     "all": "run-s lint test",
     "lint": "eslint .",
-    "test": "cross-env DEBUG=1 node test.js"
+    "test": "cross-env DEBUG=* node test.js"
   },
   "keywords": [
     "camunda",
