@@ -1,6 +1,6 @@
 {
   "name": "run-camunda",
-  "version": "8.0.0",
+  "version": "9.0.0",
   "description": "Download, spin up and shutdown the Camunda Platform painlessly from Node",
   "type": "module",
   "bin": {
